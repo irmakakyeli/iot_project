@@ -59,6 +59,7 @@ if __name__ == '__main__':
     client_id = '6432360959'
     mybot = Mybot(token, client_id, broker, port)
     mybot.start()
-
-    while True:
+    done = False
+    while not done:
         time.sleep(5)
+        done = True
