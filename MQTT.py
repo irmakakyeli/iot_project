@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 import json
 
 
-class MyMQTT:
+class MQTT:
     def __init__(self, clientID, broker, port, notifier=None):
         self.broker = "mqtt.eclipseprojects.io" 
         self.port = 1883 #might need checking
