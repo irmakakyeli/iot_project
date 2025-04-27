@@ -1,7 +1,7 @@
 import telepot
 from telepot.loop import MessageLoop
 import time
-import MQTT  # Make sure you have an MQTT.py file
+from MQTT import MQTT  # Make sure you have an MQTT.py file
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import json
 
