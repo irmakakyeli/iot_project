@@ -1,6 +1,7 @@
 import json
 import time
 import threading
+import requests
 from MQTT import MQTT as client
 
 class Timer():
@@ -11,10 +12,24 @@ class Timer():
         self.topics = []
         self.status = False
         self.timers = {}  # To manage timers per user/topic
+        self.load_config_from_catalog()
+        self.uv_threshold = 0
+        self.timerConfig = 2
 
     def sub(self, topic):
         self.topics.append(topic)
         self.client.mySubscribe(topic)
+
+    def load_config_from_catalog(self):
+        try:
+            response = requests.get("http://127.0.0.1:8080/config")
+            if response.status_code == 200:
+                config = response.json()
+                self.uv_threshold = config.get("uv_threshold", 5)
+                self.timerConfig = config.get("reminder_interval_hours", 3)
+                print(f"[CONFIG] UV threshold loaded from catalog: {self.uv_threshold}")
+        except Exception as e:
+            print(f"[CONFIG] Error fetching config: {e}")
 
     def notify(self, topic, payload):
         data = json.loads(payload)
@@ -26,7 +41,7 @@ class Timer():
         except IndexError:
             return
 
-        if uv >= 4:
+        if uv >= self.uv_threshold:
             print(f"[{user}] High UV index detected: {uv}")
             self.start_timer(user)
         else:
@@ -43,7 +58,7 @@ class Timer():
             del self.timers[user]
 
         # Set a timer for 3 hours (3 * 60 * 60)
-        timer = threading.Timer(3 * 60 * 60, send_reminder)
+        timer = threading.Timer(self.timerConfig * 60 * 60, send_reminder)
         timer.start()
         self.timers[user] = timer
         print(f"[{user}] Timer started for 3 hours.")
