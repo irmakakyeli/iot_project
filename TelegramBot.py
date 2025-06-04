@@ -20,10 +20,15 @@ class Mybot():
         self.user_map = {}  # Maps user_id
         self.uv_threshold = 0
         self.uv_threshold_high = 5
+        self.topics = []
 
     def start(self):
         MessageLoop(self.bot, self.callback_dict).run_as_thread()
         self.client.start()
+
+    def sub(self, topic):
+        self.topics.append(topic)
+        self.client.mySubscribe(topic)
 
     def load_config_from_catalog(self):
         try:
@@ -48,6 +53,7 @@ class Mybot():
                 keyboard = InlineKeyboardMarkup(inline_keyboard=[
                     [InlineKeyboardButton(text='Start UV Monitoring', callback_data='full')]
                 ])
+                self.ask_location(chat_ID)
                 self.bot.sendMessage(chat_ID, 'Sunscreen Reminder', reply_markup=keyboard)
         elif content_type == "location":
             latitude = msg['location']['latitude']
@@ -132,6 +138,7 @@ if __name__ == '__main__':
     client_id = '6432360959'
     mybot = Mybot(token, client_id, broker, port)
     mybot.start()
+    mybot.sub('UVAlert/+/uv')
     done = False
     while not done:
         time.sleep(5)
