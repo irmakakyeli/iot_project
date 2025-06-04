@@ -5,10 +5,12 @@ import json
 class MQTT:
     def __init__(self, clientID, broker, port, notifier=None):
         self.broker = "mqtt.eclipseprojects.io" 
-        self.port = 1883 #might need checking
+        self.port = 1883 
         self.clientID = clientID
         self._topic = " "
         self._isSubscriber = False
+        self.notifier = notifier #change
+    
 
         #create an instance of paho.mqtt.client
         self._paho_mqtt = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, clientID)

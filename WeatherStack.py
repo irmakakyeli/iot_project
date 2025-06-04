@@ -15,10 +15,12 @@ class WeatherStack():
     def sub(self, topic):
         self.topics.append(topic)
         self.client.mySubscribe(topic)
+    
+    
 
     def notify(self, topic, payload):
-        token = "7ffb83bd785a070c3f85b06655b8dbef"
-        url = "https://api.weatherstack.com/current?access_key=7ffb83bd785a070c3f85b06655b8dbef"
+        token = "d8744bba0fa5ac2f5e8fd6d16a8045ee" #token change
+        url = "https://api.weatherstack.com/current?access_key=d8744bba0fa5ac2f5e8fd6d16a8045ee"
         payload = json.loads(payload)
 
         try:
@@ -38,6 +40,7 @@ class WeatherStack():
 
         # Fake UV index for testing
         uv_index = data.get("current", {}).get("uv_index", 5)
+        
 
         # Publish to MQTT topic for other components
         self.client.myPublish(f"UVAlert/{user_id}/uv", {"uv": uv_index})

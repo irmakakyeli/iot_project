@@ -18,7 +18,7 @@ class Mybot():
         self.client = MQTT(client_id, broker, port, self)
         self.chat_ids = []
         self.user_map = {}  # Maps user_id
-        self.uv_threshold = 0
+        self.uv_threshold = 3 #change
         self.uv_threshold_high = 5
         self.topics = []
 
@@ -129,17 +129,16 @@ class Mybot():
         except Exception as e:
             print(f"[Geocoding] Error: {e}")
         return "Unknown"
+    
 
 
 if __name__ == '__main__':
-    token = '8165914246:AAHJ8AuNe_rEd2NENCZmUI4ZfW5G3TB_xeg'
+    token = '7790300003:AAGDToBctJpsMknSCdmoaXlrvz-XQyzyyGo' #token change
     broker = 'mqtt.eclipseprojects.io'
     port = 1883
     client_id = '6432360959'
     mybot = Mybot(token, client_id, broker, port)
     mybot.start()
     mybot.sub('UVAlert/+/uv')
-    done = False
-    while not done:
-        time.sleep(5)
-        done = True
+    print("Bot is running...") #check
+    while True:
