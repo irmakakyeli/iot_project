@@ -3,11 +3,18 @@ import json
 import time
 from MQTT import MQTT as client
 
+def load_users():
+    try:
+        with open("users.json", "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
 class ThingspeakPub:
-    def __init__(self, client_id, broker, port, api_key):
-        self.api_key = api_key
+    def __init__(self, client_id, broker, port):
         self.client = client(client_id, broker, port, self)
         self.client.start()
+        self.topics = []
 
     def sub(self, topic):
         self.topics.append(topic)
@@ -21,13 +28,24 @@ class ThingspeakPub:
 
         try:
             user = topic.split("/")[1]
-        except IndexError:
+            users = load_users()
+            user_info = users.get(user)
+            if not user_info:
+                print(f"[{user}] ❌ Not found in users.json.")
+                return
+
+            api_key = user_info.get("thingspeak_key")
+            if not api_key:
+                print(f"[{user}] ❌ Missing Thingspeak key.")
+                return
+
+        except Exception as e:
+            print(f"[ERROR] while processing user {user}: {e}")
             return
 
-        # Send to Thingspeak
         url = "https://api.thingspeak.com/update"
         params = {
-            "api_key": self.api_key,
+            "api_key": api_key,
             "field1": uv
         }
 
@@ -38,12 +56,11 @@ class ThingspeakPub:
             print(f"[{user}] ❌ Failed to send to Thingspeak: {response.status_code}")
 
 if __name__ == "__main__":
-    api_key = "13CIECX36KEC3GXI"
     client_id = "thingspeakPub"
     broker = "mqtt.eclipseprojects.io"
     port = 1883
 
-    publisher = ThingspeakPub(client_id, broker, port, api_key)
+    publisher = ThingspeakPub(client_id, broker, port)
     publisher.sub("UVAlert/+/uv")  # Subscribe to all user UV updates
 
     while True:

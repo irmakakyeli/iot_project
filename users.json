@@ -1,0 +1,26 @@
+{
+  "user1060048927": {
+    "chat_id": 1060048927,
+    "city": "Turin",
+    "thingspeak_key": "FX5C1XDYH7V7T0RU",
+    "thingspeak_channel": "https://thingspeak.com/channels/2981189"
+  },
+  "user5264576781": {
+    "chat_id": 5264576781,
+    "city": "Turin",
+    "thingspeak_key": "I00B2ZRGOQLU8M97",
+    "thingspeak_channel": "https://thingspeak.com/channels/2981193"
+  },
+  "user6432360959": {
+    "chat_id": 6432360959,
+    "city": "Turin",
+    "thingspeak_key": "DIP7M7TA5966WBZY",
+    "thingspeak_channel": "https://thingspeak.com/channels/2981196"
+  },
+  "user907260396": {
+    "chat_id": 907260396,
+    "city": "Turin",
+    "thingspeak_key": "",
+    "thingspeak_channel": ""
+  }
+}

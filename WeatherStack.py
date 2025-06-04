@@ -40,7 +40,6 @@ class WeatherStack():
 
         # Fake UV index for testing
         uv_index = data.get("current", {}).get("uv_index", 5)
-        
 
         # Publish to MQTT topic for other components
         self.client.myPublish(f"UVAlert/{user_id}/uv", {"uv": uv_index})

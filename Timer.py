@@ -22,12 +22,14 @@ class Timer():
 
     def load_config_from_catalog(self):
         try:
-            response = requests.get("http://127.0.0.1:8080/config")
+            response = requests.get("http://127.0.0.1:8081/config")
             if response.status_code == 200:
                 config = response.json()
                 self.uv_threshold = config.get("uv_threshold", 5)
                 self.timerConfig = config.get("reminder_interval_hours", 3)
                 print(f"[CONFIG] UV threshold loaded from catalog: {self.uv_threshold}")
+            else:
+                print("[CONFIG] Failed to fetch config, status code:", response.status_code)
         except Exception as e:
             print(f"[CONFIG] Error fetching config: {e}")
 
